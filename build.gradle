@@ -14,6 +14,9 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin
     implementation 'org.eclipse.jetty:jetty-maven-plugin:9.3.17.v20170317'
+    implementation 'org.apache.thrift:libthrift:0.14.2'
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'commons-io:commons-io:2.11.0'
 
 
 }

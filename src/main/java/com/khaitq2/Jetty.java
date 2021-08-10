@@ -1,6 +1,8 @@
-import API.Like;
-import API.Song;
-import API.Stream;
+package com.khaitq2;
+
+import com.khaitq2.api.Like;
+import com.khaitq2.api.Song;
+import com.khaitq2.api.Stream;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 

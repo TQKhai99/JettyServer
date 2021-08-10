@@ -1,6 +1,8 @@
-package SongService;
+package com.khaitq2.handler;
 
+import com.khaitq2.songservice.*;
 import com.google.gson.Gson;
+import com.khaitq2.songservice.Error;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
@@ -80,7 +82,7 @@ public class Client {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return res.toString();
     }
 
     public String performUnlikeSong(int id){
@@ -90,7 +92,7 @@ public class Client {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return res.toString();
     }
 
     public String performStreamSong(int id){
@@ -100,7 +102,7 @@ public class Client {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return res.toString();
     }
 
     public String performPutSong(String name, List<String> singers){
@@ -110,7 +112,7 @@ public class Client {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return res.toString();
     }
 
     public String performRemoveSong(int id){
@@ -120,6 +122,6 @@ public class Client {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return res.toString();
     }
 }

@@ -2,17 +2,12 @@ package com.khaitq2.api;
 
 import com.khaitq2.handler.Client;
 import com.khaitq2.handler.Handler;
-import org.apache.thrift.transport.TTransportException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class Stream extends Handler {
     public Stream(){
-        try {
-            client = new Client();
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        }
+        client = new Client();
     }
 
     @Override

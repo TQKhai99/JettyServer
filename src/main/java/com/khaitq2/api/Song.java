@@ -3,7 +3,6 @@ package com.khaitq2.api;
 import com.khaitq2.handler.Client;
 import com.khaitq2.handler.Handler;
 import com.khaitq2.tool.Tool;
-import org.apache.thrift.transport.TTransportException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +10,7 @@ import java.util.Map;
 public class Song extends Handler {
 
     public Song(){
-        try {
-            client = new Client();
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        }
+        client = new Client();
     }
 
     @Override

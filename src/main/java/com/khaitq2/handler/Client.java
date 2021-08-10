@@ -3,6 +3,7 @@ package com.khaitq2.handler;
 import com.khaitq2.songservice.*;
 import com.google.gson.Gson;
 import com.khaitq2.songservice.Error;
+import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
@@ -19,9 +20,13 @@ public class Client {
     private SongService.Client client;
     
     private Gson gson = new Gson();
-    public Client() throws TTransportException {
-        transport = new TFramedTransport(new TSocket("localhost", 9090));
-        transport.open();
+    public Client(){
+        try {
+            transport = new TFramedTransport(new TSocket("localhost", 9090));
+            transport.open();
+        } catch (TTransportException e) {
+            e.printStackTrace();
+        }
         protocol = new TBinaryProtocol(transport);
         client = new SongService.Client(protocol);
     }
@@ -29,7 +34,6 @@ public class Client {
         SongResult res = null;
         try{
             res = client.get(id);
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -37,42 +41,33 @@ public class Client {
     }
 
     public String performGetListSongOfArtist(String nameOfSinger){
-        List<SongStruct> res = new ArrayList<>();
+        ListSongResult list = new ListSongResult();
         try{
-            ListSongResult list = client.getListSongOfSinger(nameOfSinger);
-            for(int i : list.listSong){
-                res.add(client.get(i).song);
-            }
+            list = client.getListSongOfSinger(nameOfSinger);
         } catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return gson.toJson(_getListSong(list));
     }
 
     public String performGetTopStream(int topX){
-        List<SongStruct> res = new ArrayList<>();
+        ListSongResult list = null;
         try{
-            ListSongResult list = client.getTopStream(topX);
-            for(int i : list.listSong){
-                res.add(client.get(i).song);
-            }
+            list = client.getTopStream(topX);
         } catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return gson.toJson(_getListSong(list));
     }
 
     public String performGetTopLike(int topX){
-        List<SongStruct> res = new ArrayList<>();
+        ListSongResult list = null;
         try{
-            ListSongResult list = client.getTopLike(topX);
-            for(int i : list.listSong){
-                res.add(client.get(i).song);
-            }
+            list = client.getTopLike(topX);
         } catch (Exception e){
             e.printStackTrace();
         }
-        return gson.toJson(res);
+        return gson.toJson(_getListSong(list));
     }
 
     public String performLikeSong(int id){
@@ -123,5 +118,19 @@ public class Client {
             e.printStackTrace();
         }
         return res.toString();
+    }
+
+    // private
+    private List<SongStruct> _getListSong(ListSongResult list){
+        if(!list.error.equals(Error.SUCCESS)) return null;
+        List<SongStruct> res = new ArrayList<>();
+        for(int i : list.listSong){
+            try {
+                res.add(client.get(i).song);
+            } catch (TException e) {
+                e.printStackTrace();
+            }
+        }
+        return res;
     }
 }

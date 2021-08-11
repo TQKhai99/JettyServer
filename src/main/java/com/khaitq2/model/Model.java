@@ -1,5 +1,7 @@
-package com.khaitq2.handler;
+package com.khaitq2.model;
 
+import com.khaitq2.cache.Cache;
+import com.khaitq2.config.Config;
 import com.khaitq2.songservice.*;
 import com.google.gson.Gson;
 import com.khaitq2.songservice.Error;
@@ -14,123 +16,149 @@ import org.apache.thrift.transport.layered.TFramedTransport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client {
+public class Model {
     private TTransport transport;
-    private TProtocol protocol;
-    private SongService.Client client;
-    
-    private Gson gson = new Gson();
-    public Client(){
+    private final SongService.Client client;
+    private Cache cache;
+    private final Gson gson = new Gson();
+
+    public Model() {
         try {
-            transport = new TFramedTransport(new TSocket("localhost", 9090));
+            transport = new TFramedTransport(new TSocket(Config.getInstance().getConfig().get("tHostname"), Integer.parseInt(Config.getInstance().getConfig().get("tPort"))));
             transport.open();
         } catch (TTransportException e) {
             e.printStackTrace();
         }
-        protocol = new TBinaryProtocol(transport);
+        TProtocol protocol = new TBinaryProtocol(transport);
         client = new SongService.Client(protocol);
+        cache = Cache.getInstance();
     }
-    public String performGetSong(int id){
-        SongResult res = null;
-        try{
-            res = client.get(id);
-        }catch (Exception e){
-            e.printStackTrace();
+
+    public String performGetSong(int id) {
+        SongStruct res = null;
+        if (cache.contains(id)) {
+            res = cache.getSong(id);
+        } else {
+            try {
+                res = client.get(id).song;
+                cache.setCache(res);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return gson.toJson(res);
     }
 
-    public String performGetListSongOfArtist(String nameOfSinger){
+    public String performGetListSongOfArtist(String nameOfSinger) {
         ListSongResult list = new ListSongResult();
-        try{
+        try {
             list = client.getListSongOfSinger(nameOfSinger);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         return gson.toJson(_getListSong(list));
     }
 
-    public String performGetTopStream(int topX){
+    public String performGetTopStream(int topX) {
         ListSongResult list = null;
-        try{
+        try {
             list = client.getTopStream(topX);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert list != null;
         return gson.toJson(_getListSong(list));
     }
 
-    public String performGetTopLike(int topX){
+    public String performGetTopLike(int topX) {
         ListSongResult list = null;
-        try{
+        try {
             list = client.getTopLike(topX);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert list != null;
         return gson.toJson(_getListSong(list));
     }
 
-    public String performLikeSong(int id){
+    public String performLikeSong(int id) {
         Error res = null;
-        try{
+        try {
             res = client.like(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert res != null;
         return res.toString();
     }
 
-    public String performUnlikeSong(int id){
+    public String performUnlikeSong(int id) {
         Error res = null;
-        try{
+        try {
             res = client.unlike(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert res != null;
         return res.toString();
     }
 
-    public String performStreamSong(int id){
+    public String performStreamSong(int id) {
         Error res = null;
-        try{
+        try {
             res = client.stream(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert res != null;
         return res.toString();
     }
 
-    public String performPutSong(String name, List<String> singers){
+    public String performPutSong(String name, List<String> singers) {
         Error res = null;
-        try{
+        try {
             res = client.put(name, singers);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert res != null;
         return res.toString();
     }
 
-    public String performRemoveSong(int id){
+    public String performRemoveSong(int id) {
         Error res = null;
-        try{
+        try {
             res = client.remove(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        assert res != null;
         return res.toString();
     }
 
     // private
-    private List<SongStruct> _getListSong(ListSongResult list){
-        if(!list.error.equals(Error.SUCCESS)) return null;
+    private List<SongStruct> _getListSong(ListSongResult list) {
         List<SongStruct> res = new ArrayList<>();
-        for(int i : list.listSong){
+        if (!list.error.equals(Error.SUCCESS)) {
+            return res;
+        }
+
+        for (int i : list.listSong) {
             try {
                 res.add(client.get(i).song);
             } catch (TException e) {
                 e.printStackTrace();
             }
         }
+
         return res;
     }
 }

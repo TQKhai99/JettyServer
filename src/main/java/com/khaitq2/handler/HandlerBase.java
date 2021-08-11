@@ -1,6 +1,10 @@
 package com.khaitq2.handler;
 
-import com.khaitq2.tool.Tool;
+import com.google.gson.Gson;
+import com.khaitq2.cache.Cache;
+import com.khaitq2.model.Model;
+import com.khaitq2.util.Util;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,37 +12,37 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-public abstract class Handler extends HttpServlet {
-    public Client client;
+public abstract class HandlerBase extends HttpServlet {
+    public Model model;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         _setResp(resp);
-        doDoGet(Tool.getParameter(req), resp);
+        doDoGet(Util.getParameter(req), resp);
     }
 
     protected abstract void doDoGet(Map<String, String> para, HttpServletResponse response);
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp){
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         _setResp(resp);
-        doDoPost(Tool.getBody(req), resp);
+        doDoPost(Util.getBody(req), resp);
     }
 
     protected abstract void doDoPost(Map<String, String> para, HttpServletResponse response);
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp){
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         _setResp(resp);
-        doDoDelete(Tool.getBody(req), resp);
+        doDoDelete(Util.getBody(req), resp);
     }
 
-    protected void doDoDelete(Map<String, String> para, HttpServletResponse response){
+    protected void doDoDelete(Map<String, String> para, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
         getPrintWriter(response).println("NOT SUPPORTED");
     }
 
-    protected PrintWriter getPrintWriter(HttpServletResponse response){
+    protected PrintWriter getPrintWriter(HttpServletResponse response) {
         PrintWriter printWriter = null;
         try {
             printWriter = response.getWriter();
@@ -48,9 +52,9 @@ public abstract class Handler extends HttpServlet {
         return printWriter;
     }
 
-    protected void checkValid(String res, HttpServletResponse response){
+    protected void checkValid(String res, HttpServletResponse response) {
         PrintWriter printWriter = getPrintWriter(response);
-        switch (res){
+        switch (res) {
             case "INVALID_DATA":
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 printWriter.println("NOT EXIST");
@@ -66,7 +70,7 @@ public abstract class Handler extends HttpServlet {
         }
     }
 
-    private void _setResp(HttpServletResponse resp){
+    private void _setResp(HttpServletResponse resp) {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.setStatus(HttpServletResponse.SC_OK);

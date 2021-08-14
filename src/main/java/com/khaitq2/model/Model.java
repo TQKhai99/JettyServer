@@ -19,7 +19,7 @@ import java.util.List;
 public class Model {
     private TTransport transport;
     private final SongService.Client client;
-    private Cache cache;
+    private final Cache cache;
     private final Gson gson = new Gson();
 
     public Model() {

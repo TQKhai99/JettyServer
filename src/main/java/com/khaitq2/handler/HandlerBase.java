@@ -1,7 +1,5 @@
 package com.khaitq2.handler;
 
-import com.google.gson.Gson;
-import com.khaitq2.cache.Cache;
 import com.khaitq2.model.Model;
 import com.khaitq2.util.Util;
 

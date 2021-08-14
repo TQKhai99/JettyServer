@@ -32,21 +32,4 @@ public class Config {
         return config;
     }
 
-//    public static void WriteIni(){
-//        try {
-//            Wini ini = new Wini(new File(INI_FILE));
-//            ini.put("HTTPServer", "port", 8080);
-//            ini.put("ThriftService", "port", 9090);
-//            ini.put("ThriftService", "hostname", "localhost");
-//            ini.store();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    public static void main(String[] args) {
-//        WriteIni();
-//    }
-
 }

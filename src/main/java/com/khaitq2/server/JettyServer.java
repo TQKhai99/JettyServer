@@ -4,6 +4,7 @@ import com.khaitq2.config.Config;
 import com.khaitq2.handler.LikeHandler;
 import com.khaitq2.handler.SongHandler;
 import com.khaitq2.handler.StreamHandler;
+import com.khaitq2.render.SongRender;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
@@ -15,6 +16,7 @@ public class JettyServer {
             context.addServletWithMapping(StreamHandler.class, "/song/stream");
             context.addServletWithMapping(LikeHandler.class, "/song/like");
             context.addServletWithMapping(SongHandler.class, "/song");
+            context.addServletWithMapping(SongRender.class, "/home");
             server.setHandler(context);
             server.start();
             System.out.println("server started successful");

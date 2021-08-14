@@ -1,8 +1,6 @@
 package com.khaitq2.handler;
 
-import com.khaitq2.cache.Cache;
 import com.khaitq2.model.Model;
-import com.khaitq2.songservice.SongStruct;
 import com.khaitq2.util.Util;
 
 import javax.servlet.http.HttpServletResponse;

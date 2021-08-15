@@ -49,7 +49,7 @@ public class Model {
         return gson.toJson(res);
     }
 
-    public String performGetListSongOfArtist(String nameOfSinger) {
+    public List<SongStruct> performGetListSongOfArtist(String nameOfSinger) {
         ListSongResult list = new ListSongResult();
         try {
             list = client.getListSongOfSinger(nameOfSinger);
@@ -57,7 +57,7 @@ public class Model {
             e.printStackTrace();
         }
 
-        return gson.toJson(_getListSong(list));
+        return _getListSong(list);
     }
 
     public String performGetTopStream(int topX) {

@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
 public class JettyServer {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Server server = new Server(Integer.parseInt(Config.getInstance().getConfig().get("hPort")));
         try {
             ServletHandler context = new ServletHandler();

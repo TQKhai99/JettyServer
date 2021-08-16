@@ -108,6 +108,18 @@ public class Model {
         return res.toString();
     }
 
+    public String performEditsong(int id, String title) {
+        Error res = null;
+        try {
+            res = client.edit(id, title);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assert res != null;
+        return res.toString();
+    }
+
     public String performStreamSong(int id) {
         Error res = null;
         try {

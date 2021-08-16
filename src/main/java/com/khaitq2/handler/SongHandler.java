@@ -29,14 +29,20 @@ public class SongHandler extends HandlerBase {
 
     @Override
     protected void doDoPost(Map<String, String> para, HttpServletResponse response) {
-        if (!para.containsKey("title") || !para.containsKey("singers")) {
-            return;
+        if (para.containsKey("title") && para.containsKey("singers")) {
+            String title = para.get("title");
+            List<String> singers = Util.getList(para.get("singers"));
+            String res = model.performPutSong(title, singers);
+            checkValid(res, response);
         }
 
-        String title = para.get("title");
-        List<String> singers = Util.getList(para.get("singers"));
-        String res = model.performPutSong(title, singers);
-        checkValid(res, response);
+        if(para.containsKey("id") && para.containsKey("title")){
+            String title = para.get("title");
+            int id = Integer.parseInt(para.get("id"));
+            String res = model.performEditsong(id, title);
+            checkValid(res, response);
+        }
+
     }
 
     @Override

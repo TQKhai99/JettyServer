@@ -2,12 +2,14 @@ package com.khaitq2.render;
 
 import com.khaitq2.model.Model;
 import com.khaitq2.rythm.Rythm;
+import com.khaitq2.util.Util;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public abstract class RenderBase extends HttpServlet {
     protected Model model;
@@ -18,5 +20,4 @@ public abstract class RenderBase extends HttpServlet {
     }
 
     protected abstract void doDoGet(HttpServletResponse response) throws IOException;
-
 }
